@@ -132,3 +132,33 @@ class Cita(models.Model):
         # Validar que la fecha no sea en el pasado
         if self.fecha < datetime.now().date():
             raise ValidationError('No se pueden agendar citas en fechas pasadas')
+
+        # Nuevas validaciones de seguridad
+        # Verificar si ya existe una cita en el mismo horario
+        citas_mismo_horario = Cita.objects.filter(
+            doctor=self.doctor,
+            fecha=self.fecha,
+            hora=self.hora
+        ).exclude(id=self.id)
+        
+        if citas_mismo_horario.exists():
+            raise ValidationError('Ya existe una cita programada para este horario')
+
+        # Verificar que no exceda el límite de citas por día para el paciente
+        citas_paciente_dia = Cita.objects.filter(
+            paciente=self.paciente,
+            fecha=self.fecha
+        ).exclude(estado='CANCELADA').count()
+        
+        if citas_paciente_dia >= 3:
+            raise ValidationError('No se pueden agendar más de 3 citas por día para el mismo paciente')
+
+    def is_modificable(self):
+        """Verifica si la cita puede ser modificada"""
+        return self.estado in ['PENDIENTE', 'CONFIRMADA'] and \
+               self.fecha >= datetime.now().date()
+
+    def validar_disponibilidad(self):
+        """Verifica la disponibilidad del doctor en el horario seleccionado"""
+        horarios_disponibles = self.doctor.get_horarios_disponibles(self.fecha)
+        return self.hora in horarios_disponibles
