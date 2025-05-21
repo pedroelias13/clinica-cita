@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Cita, Doctor, Paciente, Especialidad
 from .forms import CitaForm
 
@@ -46,3 +47,18 @@ def lista_pacientes(request):
     return render(request, 'app_citas/lista_pacientes.html', {
         'pacientes': pacientes
     })
+
+@login_required
+def dashboard(request):
+    context = {
+        'total_citas': Cita.objects.count(),
+        'citas_pendientes': Cita.objects.filter(estado='PENDIENTE').count(),
+        'total_doctores': Doctor.objects.filter(activo=True).count(),
+        'total_pacientes': Paciente.objects.count(),
+    }
+    if hasattr(request.user, 'doctor'):
+        context['mis_citas'] = Cita.objects.filter(doctor=request.user.doctor)
+    elif hasattr(request.user, 'paciente'):
+        context['mis_citas'] = Cita.objects.filter(paciente=request.user.paciente)
+    
+    return render(request, 'app_citas/dashboard.html', context)
