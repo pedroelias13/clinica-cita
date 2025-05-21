@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lista de Pacientes</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Documento</th>
+            <th>Fecha Nacimiento</th>
+            <th>Teléfono</th>
+            <th>Género</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for paciente in pacientes %}
+        <tr>
+            <td>{{ paciente.usuario.get_full_name }}</td>
+            <td>{{ paciente.numero_documento }}</td>
+            <td>{{ paciente.fecha_nacimiento }}</td>
+            <td>{{ paciente.telefono }}</td>
+            <td>{{ paciente.get_genero_display }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

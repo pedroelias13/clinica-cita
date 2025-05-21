@@ -14,12 +14,11 @@ class DoctorAdmin(admin.ModelAdmin):
 
 @admin.register(Paciente)
 class PacienteAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'numero_documento', 'telefono')
-    search_fields = ('usuario__username', 'numero_documento')
+    list_display = ('usuario', 'telefono', 'fecha_nacimiento')
+    search_fields = ('usuario__username', 'usuario__first_name', 'telefono')
 
 @admin.register(Cita)
 class CitaAdmin(admin.ModelAdmin):
     list_display = ('paciente', 'doctor', 'fecha', 'hora', 'estado')
     list_filter = ('estado', 'fecha', 'doctor__especialidad')
     search_fields = ('paciente__usuario__username', 'doctor__usuario__username')
-    date_hierarchy = 'fecha'
