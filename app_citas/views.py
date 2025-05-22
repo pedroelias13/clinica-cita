@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .models import Cita, Doctor, Paciente, Especialidad
 from .forms import CitaForm
@@ -62,3 +64,26 @@ def dashboard(request):
         context['mis_citas'] = Cita.objects.filter(paciente=request.user.paciente)
     
     return render(request, 'app_citas/dashboard.html', context)
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Usuario o contraseña incorrectos')
+    return render(request, 'registration/login.html')
+
+def registro_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('dashboard')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/registro.html', {'form': form})

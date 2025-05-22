@@ -3,7 +3,8 @@ __pycache__/
 *.py[cod]
 *.so
 .Python
-*.pyc
+venv/
+env/
 
 # Django
 *.log
@@ -12,13 +13,12 @@ db.sqlite3
 media/
 staticfiles/
 
-# Entorno virtual
-venv/
-env/
-
 # IDE
 .vscode/
 .idea/
+
+# Dependencias
+node_modules/
 
 # Sistema
 .DS_Store
