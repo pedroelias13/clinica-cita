@@ -1,0 +1,25 @@
+<h2>Historial del Paciente</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Motivo</th>
+            <th>Diagnóstico</th>
+            <th>Tratamiento</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for registro in historial %}
+        <tr>
+            <td>{{ registro.fecha }}</td>
+            <td>{{ registro.motivo }}</td>
+            <td>{{ registro.diagnostico }}</td>
+            <td>{{ registro.tratamiento }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No hay registros en el historial.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
