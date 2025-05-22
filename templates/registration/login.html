@@ -47,7 +47,18 @@
     </div>
     <!-- Imagen institucional -->
     <div class="col-md-7 col-lg-6 d-none d-md-block">
-      <div class="text-center">
+{% if form.errors %}
+  <div class="alert alert-danger">
+    Usuario o contraseña incorrectos
+  </div>
+  {% for field in form %}
+    {% for error in field.errors %}
+      <div class="alert alert-danger">
+        {{ field.label }}: {{ error }}
+      </div>
+    {% endfor %}
+  {% endfor %}
+{% endif %}      <div class="text-center">
         <img src="{% static 'img/mi_institucion.png' %}" alt="Imagen clínica" class="img-fluid rounded shadow" style="max-height: 420px;">
       </div>
     </div>
