@@ -1,0 +1,32 @@
+<h2>Lista de Doctores</h2>
+<form method="get" class="mb-3">
+    <label for="actividad">Filtrar por actividad:</label>
+    <select name="actividad" id="actividad" onchange="this.form.submit()">
+        <option value="">Todas</option>
+        <option value="consulta">En consulta</option>
+        <option value="disponible">Disponible</option>
+        <option value="ausente">Ausente</option>
+    </select>
+</form>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Especialidad</th>
+            <th>Actividad Actual</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for doctor in doctores %}
+        <tr>
+            <td>{{ doctor.usuario.get_full_name }}</td>
+            <td>{{ doctor.especialidad }}</td>
+            <td>{{ doctor.actividad_actual }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No hay doctores registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
