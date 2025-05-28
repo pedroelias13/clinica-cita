@@ -1,0 +1,33 @@
+.welcome-banner {
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    border-radius: 15px;
+    padding: 30px;
+    color: white;
+}
+
+.appointment-card {
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.appointment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.medical-info-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.status-badge {
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.action-buttons .btn {
+    border-radius: 20px;
+    padding: 8px 20px;
+}

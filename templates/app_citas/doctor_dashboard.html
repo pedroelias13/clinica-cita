@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="bi bi-heart-pulse"></i> Panel Médico
+        </h1>
+        <a href="#" class="btn btn-primary shadow-sm">
+            <i class="bi bi-plus-circle"></i> Nueva Consulta
+        </a>
+    </div>
+
+    <!-- Today's Schedule -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Agenda del Día</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end shadow">
+                            <a class="dropdown-item" href="#">Ver Semana</a>
+                            <a class="dropdown-item" href="#">Ver Mes</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Timeline de citas -->
+                    <div class="timeline-doctor">
+                        {% for cita in citas_hoy %}
+                        <div class="timeline-item">
+                            <div class="time">{{ cita.hora }}</div>
+                            <div class="content">
+                                <h5>{{ cita.paciente }}</h5>
+                                <p>{{ cita.motivo }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-center text-muted">No hay citas programadas para hoy</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
