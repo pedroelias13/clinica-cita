@@ -1,23 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="container-fluid">
+    <!-- Encabezado -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </h1>
+        <a href="{% url 'app_citas:crear_cita' %}" class="d-none d-sm-inline-block btn btn-primary shadow-sm">
+            <i class="bi bi-plus-circle"></i> Nueva Cita
+        </a>
     </div>
 
+    <!-- Tarjetas de Estadísticas -->
     <div class="row">
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Citas Totales</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Citas Totales</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_citas }}</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            <i class="bi bi-calendar-check fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -29,12 +36,27 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Citas Pendientes</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Citas Pendientes</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ citas_pendientes }}</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                            <i class="bi bi-clock-history fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Doctores Activos</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_doctores }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-person-badge fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -42,52 +64,97 @@
         </div>
     </div>
 
-    {% if mis_citas %}
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Mis Citas</h6>
+    <!-- Contenido Principal -->
+    <div class="row">
+        <!-- Tabla de Citas -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Citas Recientes</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end shadow">
+                            <a class="dropdown-item" href="{% url 'app_citas:lista_citas' %}">Ver Todas</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cita in mis_citas %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-person-circle me-2"></i>
+                                            {{ cita.paciente }}
+                                        </div>
+                                    </td>
+                                    <td>{{ cita.fecha }}</td>
+                                    <td>{{ cita.hora }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ cita.get_estado_color }}">
+                                            {{ cita.get_estado_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">
+                                        <i class="bi bi-calendar-x"></i> No hay citas programadas
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>{% if user.doctor %}Paciente{% else %}Doctor{% endif %}</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for cita in mis_citas %}
-                        <tr>
-                            <td>{{ cita.fecha }}</td>
-                            <td>{{ cita.hora }}</td>
-                            <td>
-                                {% if user.doctor %}
-                                    {{ cita.paciente }}
-                                {% else %}
-                                    {{ cita.doctor }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                <span class="badge bg-{{ cita.get_estado_color }}">
-                                    {{ cita.get_estado_display }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{% url 'app_citas:detalle_cita' cita.id %}" class="btn btn-sm btn-info">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+
+        <!-- Resumen Lateral -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Resumen del Día</h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <div class="mt-3">
+                            <h4>{{ now|date:"l, j \d\e F" }}</h4>
+                            <p class="text-muted">{{ citas_hoy }} citas programadas hoy</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="text-center">
+                        <a href="{% url 'app_citas:crear_cita' %}" class="btn btn-success btn-block">
+                            <i class="bi bi-plus-circle"></i> Agendar Nueva Cita
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    {% endif %}
 </div>
 {% endblock %}

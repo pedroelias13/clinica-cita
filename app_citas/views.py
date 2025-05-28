@@ -54,18 +54,13 @@ def lista_pacientes(request):
 def dashboard(request):
     context = {
         'total_citas': Cita.objects.count(),
-        'citas_pendientes': Cita.objects.filter(estado='PENDIENTE').count(),
-        'total_doctores': Doctor.objects.filter(activo=True).count(),
-        'total_pacientes': Paciente.objects.count(),
+        'mis_citas': Cita.objects.filter(paciente__usuario=request.user) if hasattr(request.user, 'paciente') else Cita.objects.filter(doctor__usuario=request.user)
     }
-    if hasattr(request.user, 'doctor'):
-        context['mis_citas'] = Cita.objects.filter(doctor=request.user.doctor)
-    elif hasattr(request.user, 'paciente'):
-        context['mis_citas'] = Cita.objects.filter(paciente=request.user.paciente)
-    
     return render(request, 'app_citas/dashboard.html', context)
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('app_citas:dashboard')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')

@@ -11,7 +11,8 @@ app_name = 'app_citas'
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('', views.lista_citas, name='lista_citas'),
+    path('', views.dashboard, name='dashboard'),
+    path('citas/', views.lista_citas, name='lista_citas'),
     path('crear/', views.crear_cita, name='crear_cita'),
     path('especialidades/', views.lista_especialidades, name='lista_especialidades'),
     path('doctores/', views.lista_doctores, name='lista_doctores'),

@@ -142,8 +142,17 @@ class Medicamento(models.Model):
 
 class Doctor(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    especialidad_principal = models.ForeignKey(Especialidad, on_delete=models.CASCADE, related_name='doctores_principal')
-    especialidades_adicionales = models.ManyToManyField(Especialidad, related_name='doctores_adicionales')
+    especialidad_principal = models.ForeignKey(
+        Especialidad, 
+        on_delete=models.CASCADE,
+        related_name='doctores_principal',
+        default=1  # Asumiendo que 1 será el ID de la primera especialidad
+    )
+    especialidades_adicionales = models.ManyToManyField(
+        Especialidad,
+        related_name='doctores_adicionales',
+        blank=True
+    )
     numero_colegiado = models.CharField(max_length=20, unique=True)
     telefono = models.CharField(max_length=15)
     horario_inicio = models.TimeField()
