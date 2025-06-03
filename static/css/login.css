@@ -1,57 +1,160 @@
 .login-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #1977cc 0%, #1c84cf 100%);
-    padding-top: 80px;
+    background: url('../css/img/recepcion.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-page::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(245, 247, 250, 0.92); /* Más claro y profesional */
+    z-index: 1;
 }
 
 .login-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.93);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(44,73,100,0.13), 0 1.5px 6px rgba(44,73,100,0.08);
+    padding: 3.5rem 2.5rem 2.5rem 2.5rem; /* Aumenta el padding para hacer el cuadro más "gordo" */
+    max-width: 440px; /* Más ancho */
+    margin: 0 auto;
     border: none;
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+    overflow: visible;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 0.8s cubic-bezier(.39,.575,.565,1) both;
+}
+
+.login-avatar {
+    width: 70px;
+    height: 70px;
+    background: #e3f0fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    top: -35px;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 8px rgba(44,73,100,0.10);
+    border: 3px solid #fff;
+    z-index: 3;
+}
+
+.login-avatar i {
+    font-size: 2.2rem;
+    color: #1977cc;
 }
 
 .login-card .card-header {
     background: transparent;
     border: none;
-    padding: 2rem 1rem;
     text-align: center;
+    padding-top: 40px;
+    padding-bottom: 1rem;
 }
 
-.login-logo {
+.login-logo h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
     color: #1977cc;
-    margin-bottom: 1.5rem;
+    margin: 0;
+    letter-spacing: 0.5px;
+    font-family: "Raleway", sans-serif;
 }
 
-.login-logo i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+.login-logo p {
+    color: #6c757d;
+    font-size: 1rem;
+    margin-bottom: 0;
+    font-family: "Open Sans", sans-serif;
 }
 
 .login-form .input-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.1rem;
 }
 
 .login-form .input-group-text {
     border-radius: 50px 0 0 50px;
-    border: 2px solid #eee;
+    border: 1.5px solid #e3eaf1;
     border-right: none;
+    background: #f8fafc;
+    color: #1977cc;
+    font-size: 1.1rem;
 }
 
 .login-form .form-control {
     border-radius: 0 50px 50px 0;
-    border: 2px solid #eee;
+    border: 1.5px solid #e3eaf1;
     border-left: none;
-    padding: 12px 20px;
+    padding: 12px 18px;
+    font-size: 1rem;
+    background: #f8fafc;
+}
+
+.login-form .form-control:focus {
+    border-color: #1977cc;
+    box-shadow: 0 0 0 0.08rem rgba(25,119,204,0.08);
 }
 
 .login-btn {
-    padding: 12px 30px;
+    padding: 12px 0;
     border-radius: 50px;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    box-shadow: 0 5px 15px rgba(25, 119, 204, 0.3);
+    background: #1977cc;
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(25, 119, 204, 0.08);
+    transition: background 0.2s;
+}
+
+.login-btn:hover {
+    background: #1565c0;
+    color: #fff;
+}
+
+.social-login {
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+    margin-top: 2rem;
+}
+
+.social-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 4px;
+    background: #f8fafc;
+    color: #1977cc;
+    font-size: 1.15rem;
+    border: 1px solid #e3eaf1;
+    transition: background 0.2s, color 0.2s;
+}
+
+.social-btn:hover {
+    background: #1977cc;
+    color: #fff;
+}
+
+@media (max-width: 500px) {
+    .login-card {
+        padding: 1.5rem 0.5rem 1.2rem 0.5rem;
+    }
+    .login-avatar {
+        width: 50px;
+        height: 50px;
+        top: -25px;
+    }
 }

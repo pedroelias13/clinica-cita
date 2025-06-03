@@ -3,14 +3,52 @@
 
 {% block extra_css %}
 <link href="{% static 'css/login.css' %}" rel="stylesheet">
+<style>
+/* Animación de entrada para la tarjeta */
+.login-card {
+    animation: fadeInUp 0.8s cubic-bezier(.39,.575,.565,1) both;
+}
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+/* Animación para mensajes */
+.login-alert-animate {
+    animation: shake 0.4s;
+}
+@keyframes shake {
+    10%, 90% { transform: translateX(-2px);}
+    20%, 80% { transform: translateX(4px);}
+    30%, 50%, 70% { transform: translateX(-8px);}
+    40%, 60% { transform: translateX(8px);}
+}
+.login-btn:disabled {
+    background: #b0b8c1 !important;
+    color: #fff !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+    border: none;
+}
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="login-page d-flex align-items-center py-5">
+<div class="login-page d-flex align-items-center py-5 mt-5">
+    <!-- Agregamos mt-5 para separar del header -->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-7 col-lg-5">
                 <div class="card login-card">
+                    <div class="login-avatar">
+                        <i class="bi bi-person"></i>
+                    </div>
                     <div class="card-header">
                         <div class="login-logo">
                             <i class="bi bi-heart-pulse-fill"></i>
@@ -19,35 +57,41 @@
                         <p class="text-muted">Sistema de Gestión Médica</p>
                     </div>
                     <div class="card-body">
-                        <form method="post" class="login-form">
+                        <form method="post" class="login-form" autocomplete="off" id="loginForm">
                             {% csrf_token %}
                             <div class="mb-4">
                                 <div class="input-group">
                                     <span class="input-group-text bg-transparent border-end-0">
                                         <i class="bi bi-person"></i>
                                     </span>
-                                    <input type="text" name="username" class="form-control border-start-0" placeholder="Usuario" required>
+                                    <input type="text" name="username" class="form-control border-start-0" placeholder="Usuario" required autofocus id="usernameInput">
                                 </div>
+                                <!-- Aquí aparecería el help_text si lo mostraras en el login, pero normalmente solo aparece en el registro -->
+                                {# Ejemplo de cómo se vería: #}
+                                {# <small class="form-text text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small> #}
                             </div>
                             <div class="mb-4">
-                                <div class="input-group">
+                                <div class="input-group" id="show_hide_password">
                                     <span class="input-group-text bg-transparent border-end-0">
                                         <i class="bi bi-lock"></i>
                                     </span>
-                                    <input type="password" name="password" class="form-control border-start-0" placeholder="Contraseña" required>
+                                    <input type="password" name="password" class="form-control border-start-0" placeholder="Contraseña" required id="passwordInput">
+                                    <button class="btn btn-outline-secondary border-start-0" type="button" id="togglePassword" tabindex="-1">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
                                 </div>
                             </div>
                             
                             {% if messages %}
                                 {% for message in messages %}
-                                    <div class="alert alert-danger py-2">
+                                    <div class="alert alert-danger py-2 login-alert-animate" id="loginAlert">
                                         <i class="bi bi-exclamation-circle"></i> {{ message }}
                                     </div>
                                 {% endfor %}
                             {% endif %}
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary login-btn">
+                                <button type="submit" class="btn btn-primary login-btn" id="submitBtn" disabled>
                                     Ingresar
                                 </button>
                             </div>
@@ -72,4 +116,41 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Mostrar/ocultar contraseña
+document.addEventListener('DOMContentLoaded', function() {
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('passwordInput');
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+    }
+    // Animación para mensajes de error
+    const alert = document.getElementById('loginAlert');
+    if(alert) {
+        setTimeout(() => alert.classList.remove('login-alert-animate'), 1000);
+    }
+
+    // Habilitar botón solo si los campos están completos
+    const usernameInput = document.getElementById('usernameInput');
+    const submitBtn = document.getElementById('submitBtn');
+    function checkForm() {
+        if (usernameInput.value.trim() && passwordInput.value.trim()) {
+            submitBtn.disabled = false;
+        } else {
+            submitBtn.disabled = true;
+        }
+    }
+    usernameInput.addEventListener('input', checkForm);
+    passwordInput.addEventListener('input', checkForm);
+    checkForm();
+});
+</script>
 {% endblock %}

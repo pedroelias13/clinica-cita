@@ -12,7 +12,7 @@
                 <thead class="table-primary">
                     <tr>
                         <th>Nombre</th>
-                        <th>Documento</th>
+                        <th>Usuario</th>
                         <th>Fecha Nacimiento</th>
                         <th>Teléfono</th>
                         <th>Género</th>
@@ -25,14 +25,16 @@
                             <i class="fas fa-user text-secondary"></i>
                             {{ paciente.usuario.get_full_name }}
                         </td>
-                        <td>{{ paciente.numero_documento }}</td>
+                        <td>{{ paciente.usuario.username }}</td>
                         <td>{{ paciente.fecha_nacimiento }}</td>
                         <td>
                             <i class="fas fa-phone text-primary"></i>
                             {{ paciente.telefono }}
                         </td>
                         <td>
-                            <span class="badge bg-info">{{ paciente.get_genero_display }}</span>
+                            <span class="badge bg-info">
+                                {{ paciente.genero.nombre }}
+                            </span>
                         </td>
                     </tr>
                     {% endfor %}

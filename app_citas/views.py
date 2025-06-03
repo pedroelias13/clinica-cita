@@ -3,8 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .models import Cita, Doctor, Paciente, Especialidad
-from .forms import CitaForm
+from .models import Cita, Doctor, Paciente, Especialidad, Genero, TipoSangre
+from django.utils import timezone
+from django.contrib.auth.models import User
+from .forms import CitaForm, RegistroForm
 
 @login_required
 def lista_citas(request):
@@ -74,11 +76,23 @@ def login_view(request):
 
 def registro_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistroForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.email = form.cleaned_data['email']
+            user.save()
+            # Crear el paciente asociado
+            Paciente.objects.create(
+                usuario=user,
+                fecha_nacimiento=form.cleaned_data['fecha_nacimiento'],
+                genero=form.cleaned_data['genero'],
+                telefono=form.cleaned_data['telefono'],
+                direccion=form.cleaned_data['direccion'],
+            )
             login(request, user)
             return redirect('dashboard')
     else:
-        form = UserCreationForm()
+        form = RegistroForm()
     return render(request, 'registration/registro.html', {'form': form})
