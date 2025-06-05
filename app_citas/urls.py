@@ -17,5 +17,11 @@ urlpatterns = [
     path('especialidades/', views.lista_especialidades, name='lista_especialidades'),
     path('doctores/', views.lista_doctores, name='lista_doctores'),
     path('pacientes/', views.lista_pacientes, name='lista_pacientes'),
+<<<<<<< Updated upstream
     # Agrega aquí más rutas si tienes más plantillas/vistas
+=======
+    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('doctor-dashboard/', views.doctor_dashboard, name='doctor_dashboard'),
+    path('paciente-dashboard/', views.paciente_dashboard, name='paciente_dashboard'),
+>>>>>>> Stashed changes
 ]
