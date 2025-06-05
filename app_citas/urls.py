@@ -17,4 +17,5 @@ urlpatterns = [
     path('especialidades/', views.lista_especialidades, name='lista_especialidades'),
     path('doctores/', views.lista_doctores, name='lista_doctores'),
     path('pacientes/', views.lista_pacientes, name='lista_pacientes'),
+    # Agrega aquí más rutas si tienes más plantillas/vistas
 ]

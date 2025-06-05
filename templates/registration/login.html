@@ -4,6 +4,17 @@
 {% block extra_css %}
 <link href="{% static 'css/login.css' %}" rel="stylesheet">
 <style>
+/* Quitar fondo de color del encabezado detrás del login */
+.login-header-bg {
+    display: none !important;
+}
+/* Traer el cuadro de login al frente */
+.login-card {
+    z-index: 10 !important;
+    background: rgba(255,255,255,0.97);
+    /* ...otros estilos existentes... */
+}
+
 /* Animación de entrada para la tarjeta */
 .login-card {
     animation: fadeInUp 0.8s cubic-bezier(.39,.575,.565,1) both;
@@ -36,6 +47,25 @@
     box-shadow: none;
     border: none;
 }
+.card-header, .login-logo, .card-header * {
+    position: relative;
+    z-index: 2;
+}
+.login-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1977cc 0%, #1c84cf 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* Agrega un padding-top para evitar que el login quede debajo del header fijo */
+    padding-top: 120px;
+}
+@media (max-width: 768px) {
+    .login-page {
+        padding-top: 140px;
+    }
+}
 </style>
 {% endblock %}
 
@@ -46,6 +76,7 @@
         <div class="row justify-content-center">
             <div class="col-md-7 col-lg-5">
                 <div class="card login-card">
+                    {# <div class="login-header-bg"></div> #}
                     <div class="login-avatar">
                         <i class="bi bi-person"></i>
                     </div>
