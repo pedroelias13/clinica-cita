@@ -50,15 +50,33 @@ def lista_pacientes(request):
 
 @login_required
 def dashboard(request):
-    context = {
-        'total_citas': Cita.objects.count(),
-        'citas_pendientes': Cita.objects.filter(estado='PENDIENTE').count(),
-        'total_doctores': Doctor.objects.filter(activo=True).count(),
-        'total_pacientes': Paciente.objects.count(),
-    }
-    if hasattr(request.user, 'doctor'):
-        context['mis_citas'] = Cita.objects.filter(doctor=request.user.doctor)
-    elif hasattr(request.user, 'paciente'):
-        context['mis_citas'] = Cita.objects.filter(paciente=request.user.paciente)
-    
-    return render(request, 'app_citas/dashboard.html', context)
+    user = request.user
+    if hasattr(user, 'doctor'):
+        return redirect('app_citas:doctor_dashboard')
+    elif hasattr(user, 'paciente'):
+        return redirect('app_citas:paciente_dashboard')
+    elif user.is_superuser or user.is_staff:
+        return redirect('app_citas:admin_dashboard')
+    else:
+        return render(request, 'app_citas/dashboard.html')
+
+@login_required
+def doctor_dashboard(request):
+    # Lógica y contexto para el médico
+    return render(request, 'app_citas/doctor_dashboard.html', {
+        # ...contexto para el doctor...
+    })
+
+@login_required
+def paciente_dashboard(request):
+    # Lógica y contexto para el paciente
+    return render(request, 'app_citas/paciente_dashboard.html', {
+        # ...contexto para el paciente...
+    })
+
+@login_required
+def admin_dashboard(request):
+    # Lógica y contexto para el administrativo
+    return render(request, 'app_citas/admin_dashboard.html', {
+        # ...contexto para el administrativo...
+    })

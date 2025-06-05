@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/login.css' %}" rel="stylesheet">
+<style>
+/* Animación de entrada para la tarjeta */
+.login-card {
+    animation: fadeInUp 0.8s cubic-bezier(.39,.575,.565,1) both;
+}
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(40px);}
+    100% { opacity: 1; transform: none;}
+}
+.login-btn:disabled {
+    background: #b0b8c1 !important;
+    color: #fff !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+    border: none;
+}
+.form-control, textarea, select {
+    border-radius: 50px !important;
+    border: 2px solid #e3eaf1 !important;
+    background: #f8fafc !important;
+    padding: 12px 20px !important;
+    font-size: 1.05rem !important;
+    margin-bottom: 0.2rem;
+}
+.form-control:focus, textarea:focus, select:focus {
+    border-color: #1977cc !important;
+    box-shadow: 0 0 0 0.1rem rgba(25,119,204,0.08);
+}
+label {
+    font-weight: 600;
+    color: #1977cc;
+    margin-bottom: 0.2rem;
+}
+small.form-text {
+    color: #888 !important;
+}
+.login-logo {
+    color: #1977cc;
+    margin-bottom: 1.2rem;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-family: "Raleway", sans-serif;
+}
+.login-logo i {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+.login-logo h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1977cc;
+    margin: 0;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-page d-flex align-items-center py-5 mt-5" style="background: linear-gradient(135deg, #1977cc 0%, #1c84cf 100%); min-height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-5">
+                <div class="card login-card shadow">
+                    <div class="card-header text-center bg-white border-0">
+                        <div class="login-logo">
+                            <i class="bi bi-person-plus"></i>
+                            <h3>Registro de Usuario</h3>
+                        </div>
+                        <p class="text-muted mb-0">Crea tu cuenta para agendar citas</p>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" autocomplete="off">
+                            {% csrf_token %}
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            <div class="d-grid mt-3">
+                                <button type="submit" class="btn btn-primary login-btn">Registrarse</button>
+                            </div>
+                        </form>
+                        <div class="text-center mt-4">
+                            <a href="{% url 'login' %}" class="btn btn-link">¿Ya tienes cuenta? Inicia sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

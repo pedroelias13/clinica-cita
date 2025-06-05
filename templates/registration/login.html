@@ -2,55 +2,70 @@
 
 {% block content %}
 <div class="container-fluid">
-  <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="row justify-content-center align-items-center" style="min-height: 90vh;">
     <!-- Formulario de login y bienvenida -->
-    <div class="col-md-5 col-lg-4">
-      <div class="card shadow mb-3">
+    <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
+      <div class="card shadow-lg border-0 mb-3">
+        <div class="card-header bg-white border-0 text-center pb-0">
+          <img src="{% static 'img/favicon.png' %}" alt="Logo" width="48" class="mb-2">
+          <h4 class="mb-1 fw-bold text-primary">Acceso a MediCitas</h4>
+          <p class="text-muted mb-0" style="font-size: 1em;">Ingrese sus credenciales para continuar</p>
+        </div>
         <div class="card-body">
-          <h4 class="mb-3">¿Ya tiene una cuenta?</h4>
-          <form method="post">
+          <form method="post" autocomplete="off">
             {% csrf_token %}
             <div class="mb-3">
-              <label for="username" class="form-label">Nombre de usuario</label>
-              <input type="text" name="username" class="form-control" required>
+              <label for="username" class="form-label">Usuario</label>
+              <input type="text" name="username" class="form-control" required autofocus placeholder="Ingrese su usuario">
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Contraseña</label>
-              <input type="password" name="password" class="form-control" required>
+              <input type="password" name="password" class="form-control" required placeholder="Ingrese su contraseña">
             </div>
-            <div class="mb-2 form-check">
-              <input type="checkbox" class="form-check-input" id="rememberMe">
-              <label class="form-check-label" for="rememberMe">Recordar mi nombre de usuario</label>
-            </div>
-            <div class="mb-2">
-              <a href="#">¿Olvidó <span class="text-primary">contraseña</span> o <span class="text-primary">nombre de usuario</span>?</a>
-            </div>
-            {% if form.errors %}
-              <div class="alert alert-danger">
-                Usuario o contraseña incorrectos
-              </div>
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-danger py-2 mb-2">{{ message }}</div>
+              {% endfor %}
             {% endif %}
             <div class="d-grid mb-3">
-              <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+              <button type="submit" class="btn btn-primary btn-lg">Iniciar sesión</button>
             </div>
           </form>
+          <div class="text-center mb-2">
+            <a href="#" class="small text-decoration-none">¿Olvidó su contraseña?</a>
+          </div>
           <hr>
-          <h5 class="mb-2">Bienvenido(a) a MediCitas</h5>
-          <p class="mb-3" style="font-size: 0.95em;">
-            Este portal es un registro de salud controlado por el paciente. Solo toma un momento abrir una cuenta utilizando un sencillo asistente de registro que lo guiará paso a paso. Una vez registrado, tendrá acceso a todas las herramientas de la aplicación.
-          </p>
-          <div class="d-grid">
-            <a href="{% url 'app_citas:registro' %}" class="btn btn-success">Crear una cuenta nueva</a>
+          <div class="text-center">
+            <span class="text-muted">¿No tienes cuenta?</span>
+            <a href="{% url 'registro' %}" class="btn btn-link p-0 ms-1">Regístrate</a>
           </div>
         </div>
       </div>
     </div>
     <!-- Imagen institucional -->
-    <div class="col-md-7 col-lg-6 d-none d-md-block">
+    <div class="col-12 col-md-7 col-lg-6 d-none d-md-block">
       <div class="text-center">
-        <img src="{% static 'img/mi_institucion.png' %}" alt="Imagen clínica" class="img-fluid rounded shadow" style="max-height: 420px;">
+        <img src="{% static 'img/mi_institucion.png' %}" alt="Imagen clínica" class="img-fluid rounded shadow" style="max-height: 420px; width: 100%; object-fit: cover;">
       </div>
     </div>
   </div>
 </div>
+<style>
+@media (max-width: 991.98px) {
+  .col-md-7.col-lg-6.d-none.d-md-block {
+    display: none !important;
+  }
+}
+@media (max-width: 575.98px) {
+  .card-header img {
+    width: 36px !important;
+  }
+  .card-header h4 {
+    font-size: 1.2rem !important;
+  }
+  .card {
+    margin: 0 5px;
+  }
+}
+</style>
 {% endblock %}
