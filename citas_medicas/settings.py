@@ -56,9 +56,20 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-LOGIN_REDIRECT_URL = 'app_citas:dashboard'
-LOGOUT_REDIRECT_URL = 'login'
+# Configuración de autenticación
 LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'app_citas:dashboard'
+
+# Variables para redirección según rol
+ADMIN_REDIRECT_URL = 'app_citas:admin_dashboard'
+DOCTOR_REDIRECT_URL = 'app_citas:doctor_dashboard'
+PACIENTE_REDIRECT_URL = 'app_citas:paciente_dashboard'
+
+# Asegurarse que el usuario no autenticado vaya al login
+MIDDLEWARE += [
+    'app_citas.middleware.LoginRequiredMiddleware',
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

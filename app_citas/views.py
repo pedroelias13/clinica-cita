@@ -62,17 +62,29 @@ def dashboard(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('app_citas:dashboard')
+        return redirect_user_by_role(request.user)
+        
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+        
         if user is not None:
             login(request, user)
-            return redirect('dashboard')
+            return redirect_user_by_role(user)
         else:
             messages.error(request, 'Usuario o contraseña incorrectos')
+            
     return render(request, 'registration/login.html')
+
+def redirect_user_by_role(user):
+    if user.is_superuser:
+        return redirect('app_citas:admin_dashboard')
+    elif hasattr(user, 'doctor'):
+        return redirect('app_citas:doctor_dashboard')
+    elif hasattr(user, 'paciente'):
+        return redirect('app_citas:paciente_dashboard')
+    return redirect('app_citas:dashboard')
 
 def registro_view(request):
     if request.method == 'POST':
