@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <h2>{{ titulo }}</h2>
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>{% if user.doctor %}Paciente{% else %}Doctor{% endif %}</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cita in citas %}
+                        <tr>
+                            <td>{{ cita.fecha }}</td>
+                            <td>{{ cita.hora }}</td>
+                            <td>
+                                {% if user.doctor %}
+                                    {{ cita.paciente.usuario.get_full_name }}
+                                {% else %}
+                                    {{ cita.doctor.usuario.get_full_name }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ cita.get_estado_color }}">
+                                    {{ cita.get_estado_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No hay historial de citas.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

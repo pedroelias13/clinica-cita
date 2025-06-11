@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <h2>{{ titulo }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="doctor" class="form-label">Doctor</label>
+            <select id="doctor" name="doctor" class="form-select" required>
+                <option value="">Seleccione un doctor</option>
+                {% for d in disponibilidad %}
+                    <option value="{{ d.doctor.id }}">{{ d.doctor.usuario.get_full_name }} ({{ d.doctor.especialidad_principal }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3" id="horarios-container"></div>
+        <div class="mb-3">
+            <label for="motivo" class="form-label">Motivo de la cita</label>
+            <textarea id="motivo" name="motivo" class="form-control" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="tipo_cita" class="form-label">Tipo de cita</label>
+            <select id="tipo_cita" name="tipo_cita" class="form-select" required>
+                <option value="PRIMERA_VEZ">Primera Vez</option>
+                <option value="SEGUIMIENTO">Seguimiento</option>
+                <option value="CONTROL">Control</option>
+                <option value="EMERGENCIA">Emergencia</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Agendar Cita</button>
+        <a href="{% url 'app_citas:lista_citas' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const disponibilidad = JSON.parse("{{ disponibilidad_json|escapejs }}");
+const horariosContainer = document.getElementById('horarios-container');
+const doctorSelect = document.getElementById('doctor');
+
+doctorSelect.addEventListener('change', function() {
+    horariosContainer.innerHTML = '';
+    const doctorId = this.value;
+    if (!doctorId) return;
+    const doctorData = disponibilidad.find(d => d.doctor.id == doctorId);
+    if (!doctorData) return;
+    let html = '<label class="form-label">Fecha y hora disponible</label>';
+    html += '<div class="row">';
+    doctorData.dias.forEach(dia => {
+        dia.horas.forEach(hora => {
+            // Un solo radio por combinación fecha-hora
+            html += `<div class="col-md-6 mb-2">
+                        <label class="form-check">
+                            <input class="form-check-input" type="radio" name="fecha_hora" value="${dia.fecha}|${hora}" required>
+                            <span class="form-check-label">${dia.fecha} - ${hora}</span>
+                        </label>
+                    </div>`;
+        });
+    });
+    html += '</div>';
+    horariosContainer.innerHTML = html;
+});
+
+// Al enviar el formulario, separa fecha y hora en campos ocultos
+document.querySelector('form').addEventListener('submit', function(e) {
+    const selected = document.querySelector('input[name="fecha_hora"]:checked');
+    if (selected) {
+        const [fecha, hora] = selected.value.split('|');
+        let fechaInput = document.getElementById('fecha-hidden');
+        let horaInput = document.getElementById('hora-hidden');
+        if (!fechaInput) {
+            fechaInput = document.createElement('input');
+            fechaInput.type = 'hidden';
+            fechaInput.name = 'fecha';
+            fechaInput.id = 'fecha-hidden';
+            this.appendChild(fechaInput);
+        }
+        if (!horaInput) {
+            horaInput = document.createElement('input');
+            horaInput.type = 'hidden';
+            horaInput.name = 'hora';
+            horaInput.id = 'hora-hidden';
+            this.appendChild(horaInput);
+        }
+        fechaInput.value = fecha;
+        horaInput.value = hora;
+    }
+});
+</script>
+{% endblock %}

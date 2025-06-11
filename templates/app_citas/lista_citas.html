@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-5 mt-5">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-calendar-check"></i> Mis Citas
+        </h1>
+        <a href="{% url 'app_citas:crear_cita' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nueva Cita
+        </a>
+    </div>
+
+    <div class="row">
+        {% for cita in citas %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="icon-circle me-3">
+                            <i class="fas fa-user-md"></i>
+                        </span>
+                        <div>
+                            <h6 class="mb-0">Dr. {{ cita.doctor.usuario.get_full_name }}</h6>
+                            <small class="text-muted">{{ cita.doctor.especialidad_principal }}</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="mb-1">
+                            <i class="far fa-calendar me-2 text-primary"></i>
+                            {{ cita.fecha|date:"l j F, Y" }}
+                        </p>
+                        <p class="mb-1">
+                            <i class="far fa-clock me-2 text-primary"></i>
+                            {{ cita.hora|time:"H:i" }}
+                        </p>
+                        {% if cita.motivo %}
+                        <p class="mb-1">
+                            <i class="far fa-comment-alt me-2 text-primary"></i>
+                            {{ cita.motivo }}
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-{{ cita.get_estado_color }}">
+                            {{ cita.get_estado_display }}
+                        </span>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            {% if cita.estado == 'PENDIENTE' %}
+                            <button class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+            <h5>No tienes citas programadas</h5>
+            <p class="text-muted">Programa tu primera cita ahora</p>
+            <a href="{% url 'app_citas:crear_cita' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Agendar Cita
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

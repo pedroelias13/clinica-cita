@@ -11,6 +11,7 @@ body {
     background-color: #f8f9fa;
     font-family: "Open Sans", sans-serif;
     color: var(--text-color);
+    padding-top: 120px; /* Aumentamos el padding superior */
 }
 .card {
     border-radius: 1rem;
@@ -45,11 +46,14 @@ h1, h2, h3, h4, h5, h6 {
 # Top Bar
 --------------------------------------------------------------*/
 #topbar {
-  background: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 40px;
-  font-size: 14px;
-  transition: all 0.5s;
-  z-index: 996;
+  z-index: 1030;
+  background: #1977cc;
+  color: #fff;
 }
 
 #topbar.topbar-scrolled {
@@ -77,16 +81,19 @@ h1, h2, h3, h4, h5, h6 {
 # Header
 --------------------------------------------------------------*/
 #header {
-  background: #fff;
-  transition: all 0.5s;
-  z-index: 997;
-  padding: 15px 0;
+  position: fixed;
   top: 40px;
-  box-shadow: 0px 2px 15px rgba(25, 119, 204, 0.1);
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  z-index: 1020;
 }
 
 #header.header-scrolled {
   top: 0;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 #header .logo {
@@ -112,6 +119,8 @@ h1, h2, h3, h4, h5, h6 {
 --------------------------------------------------------------*/
 .navbar {
   padding: 0;
+  background: transparent;
+  margin-top: 0;
 }
 
 .navbar ul {
@@ -124,6 +133,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar li {
   position: relative;
+  padding: 10px 15px;
 }
 
 .navbar>ul>li {
@@ -137,8 +147,8 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
-  color: var(--heading-color);
+  font-size: 15px;
+  color: #2c4964;
   white-space: nowrap;
   transition: 0.3s;
   border-bottom: 2px solid #fff;
@@ -149,7 +159,7 @@ h1, h2, h3, h4, h5, h6 {
 .navbar .active,
 .navbar .active:focus,
 .navbar li:hover>a {
-  color: var(--primary-color);
+  color: #1977cc;
   border-color: var(--primary-color);
 }
 
@@ -236,3 +246,101 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0 5px;
     transition: all 0.3s;
 } */
+
+/* Iconos y badges */
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--bs-primary-rgb), 0.1);
+    color: var(--bs-primary);
+}
+
+.status-badge {
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    border-radius: 50rem;
+}
+
+/* Ajustes de espaciado para el contenido principal */
+main#main {
+    margin-top: 120px; /* 40px del topbar + 60px del header + 20px de espacio */
+    min-height: calc(100vh - 120px);
+    padding: 20px 0;
+    background: #f8f9fa;
+}
+
+/* Container ajustado */
+.dashboard-container {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    transition: all 0.3s;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+footer {
+  background: #2c4964;
+  color: #ffffff;
+  padding: 40px 0;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+  margin-top: 40px;
+}
+
+footer a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+footer a:hover {
+  color: #1977cc;
+}
+
+footer .social-icons {
+  margin-top: 20px;
+}
+
+footer .social-icons a {
+  display: inline-block;
+  margin: 0 10px;
+  transition: transform 0.3s;
+}
+
+footer .social-icons a:hover {
+  transform: translateY(-5px);
+}
+
+footer .copyright {
+  margin-top: 20px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Ajustes responsive */
+@media (max-width: 768px) {
+    #main {
+        margin-top: 100px;
+    }
+    
+    #header {
+        height: 50px;
+    }
+}

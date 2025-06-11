@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Mis Citas</h2>
+        {% if user.paciente %}
+        <a href="{% url 'app_citas:crear_cita' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Nueva Cita
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>{% if user.doctor %}Paciente{% else %}Doctor{% endif %}</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cita in citas %}
+                        <tr>
+                            <td>{{ cita.fecha }}</td>
+                            <td>{{ cita.hora }}</td>
+                            <td>
+                                {% if user.doctor %}
+                                    {{ cita.paciente.usuario.get_full_name }}
+                                {% else %}
+                                    {{ cita.doctor.usuario.get_full_name }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ cita.get_estado_color }}">
+                                    {{ cita.get_estado_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'app_citas:detalle_cita' cita.id %}" class="btn btn-sm btn-info">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    {% if user.doctor %}
+                                    <button class="btn btn-sm btn-success actualizar-estado" data-cita-id="{{ cita.id }}">
+                                        <i class="bi bi-check-circle"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No hay citas registradas</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

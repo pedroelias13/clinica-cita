@@ -58,8 +58,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Configuración de autenticación
 LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'app_citas:dashboard'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Variables para redirección según rol
 ADMIN_REDIRECT_URL = 'app_citas:admin_dashboard'

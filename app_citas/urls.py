@@ -1,27 +1,30 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .viewsets import DoctorViewSet, CitaViewSet
+from django.urls import path
 from . import views
-
-router = DefaultRouter()
-router.register(r'doctores', DoctorViewSet)
-router.register(r'citas', CitaViewSet, basename='cita')
 
 app_name = 'app_citas'
 
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('', views.dashboard, name='dashboard'),
+    # Dashboard
+    path('dashboard/', views.dashboard, name='dashboard'),
+    
+    # Citas
     path('citas/', views.lista_citas, name='lista_citas'),
-    path('crear/', views.crear_cita, name='crear_cita'),
-    path('especialidades/', views.lista_especialidades, name='lista_especialidades'),
+    path('citas/crear/', views.crear_cita, name='crear_cita'),
+    path('citas/<int:pk>/editar/', views.editar_cita, name='editar_cita'),
+    path('citas/<int:pk>/cancelar/', views.cancelar_cita, name='cancelar_cita'),
+    path('citas/historial/', views.historial_citas, name='historial_citas'),
+    
+    # Doctores
     path('doctores/', views.lista_doctores, name='lista_doctores'),
-    path('pacientes/', views.lista_pacientes, name='lista_pacientes'),
-<<<<<<< Updated upstream
-    # Agrega aquí más rutas si tienes más plantillas/vistas
-=======
-    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
-    path('doctor-dashboard/', views.doctor_dashboard, name='doctor_dashboard'),
-    path('paciente-dashboard/', views.paciente_dashboard, name='paciente_dashboard'),
->>>>>>> Stashed changes
+
+    # Las siguientes rutas requieren que crees las vistas antes de usarlas:
+    # path('citas/<int:pk>/', views.detalle_cita, name='detalle_cita'),
+    # path('doctores/<int:pk>/', views.detalle_doctor, name='detalle_doctor'),
+    path('perfil/', views.perfil, name='perfil'),
+    path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
+
+    # Rutas para los dashboards
+    path('admin/', views.admin_dashboard, name='admin_dashboard'),
+    path('doctor/', views.doctor_dashboard, name='doctor_dashboard'),
+    path('paciente/', views.paciente_dashboard, name='paciente_dashboard'),
 ]

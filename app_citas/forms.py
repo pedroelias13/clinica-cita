@@ -46,10 +46,11 @@ class RegistroForm(UserCreationForm):
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
-        fields = ['doctor', 'fecha', 'hora', 'motivo']
+        fields = ['doctor', 'fecha', 'hora', 'motivo', 'tipo_cita']
         widgets = {
-            'doctor': forms.Select(attrs={'class': 'form-control'}),
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'hora': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
-            'motivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'motivo': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'doctor': forms.Select(attrs={'class': 'form-control'}),
+            'tipo_cita': forms.Select(attrs={'class': 'form-control'})
         }

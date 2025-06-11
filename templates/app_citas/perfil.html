@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <h2>Mi Perfil</h2>
+    <div class="card mt-3">
+        <div class="card-body">
+            <p><strong>Usuario:</strong> {{ user.username }}</p>
+            <p><strong>Nombre:</strong> {{ user.get_full_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            {% if perfil %}
+                {% if perfil.telefono %}
+                <p><strong>Teléfono:</strong> {{ perfil.telefono }}</p>
+                {% endif %}
+                {% if perfil.direccion %}
+                <p><strong>Dirección:</strong> {{ perfil.direccion }}</p>
+                {% endif %}
+            {% endif %}
+            <a href="{% url 'app_citas:editar_perfil' %}" class="btn btn-primary mt-3">Editar Perfil</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

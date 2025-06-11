@@ -142,32 +142,27 @@ class Medicamento(models.Model):
 
 class Doctor(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    numero_colegiado = models.CharField(max_length=50, blank=True, null=True)
     especialidad_principal = models.ForeignKey(
         Especialidad, 
         on_delete=models.CASCADE,
-        related_name='doctores_principal',
-        default=1  # Asumiendo que 1 será el ID de la primera especialidad
+        related_name='doctores_principal'
     )
     especialidades_adicionales = models.ManyToManyField(
-        Especialidad,
+        Especialidad, 
         related_name='doctores_adicionales',
         blank=True
     )
-    numero_colegiado = models.CharField(max_length=20, unique=True)
-    telefono = models.CharField(max_length=15)
-    horario_inicio = models.TimeField()
-    horario_fin = models.TimeField()
-    duracion_cita = models.IntegerField(default=30, help_text="Duración de cada cita en minutos")
-    activo = models.BooleanField(default=True)
-    foto = models.ImageField(upload_to='doctores/', null=True, blank=True)
-    consultorio = models.CharField(max_length=50, blank=True)
     titulo = models.CharField(max_length=100, blank=True)
+    consultorio = models.CharField(max_length=50, blank=True)
     biografia = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    activo = models.BooleanField(default=True)
+    horario_inicio = models.TimeField(default='09:00')
+    horario_fin = models.TimeField(default='18:00')
 
     class Meta:
-        ordering = ['usuario__first_name', 'usuario__last_name']
+        verbose_name = "Doctor"
+        verbose_name_plural = "Doctores"
 
     def __str__(self):
         return f"Dr. {self.usuario.get_full_name()}"

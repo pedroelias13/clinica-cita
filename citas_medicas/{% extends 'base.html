@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card dashboard-card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-calendar-check text-primary"></i> 
+                        Citas Totales
+                    </h5>
+                    <h2 class="card-text">{{ total_citas }}</h2>
+                </div>
+            </div>
+        </div>
+        {% if user.doctor %}
+        <div class="col-lg-4">
+            <div class="card dashboard-card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-clock text-warning"></i>
+                        Citas Pendientes
+                    </h5>
+                    <h2 class="card-text">{{ citas_pendientes }}</h2>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        // ...más cards según el rol...
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Próximas Citas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Doctor</th>
+                                    <th>Paciente</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cita in mis_citas %}
+                                <tr>
+                                    <td>{{ cita.fecha }}</td>
+                                    <td>{{ cita.hora }}</td>
+                                    <td>{{ cita.doctor.get_full_name }}</td>
+                                    <td>{{ cita.paciente.get_full_name }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ cita.get_estado_color }}">
+                                            {{ cita.get_estado_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay citas programadas</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

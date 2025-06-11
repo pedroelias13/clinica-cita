@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">
+            <i class="bi bi-person-badge"></i> Doctores
+        </h2>
+        {% if user.is_staff %}
+        <a href="{% url 'admin:app_citas_doctor_add' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Nuevo Doctor
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for doctor in doctores %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ doctor.usuario.get_full_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ doctor.especialidad_principal }}</h6>
+                    
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="bi bi-hospital"></i> Consultorio: {{ doctor.consultorio }}
+                        </small>
+                    </p>
+                    
+                    {% if doctor.biografia %}
+                    <p class="card-text">{{ doctor.biografia|truncatewords:30 }}</p>
+                    {% endif %}
+
+                    <div class="mt-3">
+                        <span class="badge bg-primary">
+                            {{ doctor.horario_inicio|time:"H:i" }} - {{ doctor.horario_fin|time:"H:i" }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    {% if user.paciente %}
+                    <a href="{% url 'app_citas:crear_cita' %}?doctor={{ doctor.id }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-calendar-plus"></i> Agendar Cita
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                No hay doctores disponibles en este momento.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

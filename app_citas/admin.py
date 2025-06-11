@@ -16,19 +16,27 @@ class EspecialidadAdmin(admin.ModelAdmin):
 
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'especialidad_principal', 'numero_colegiado', 'activo', 'total_citas')
-    list_filter = ('especialidad_principal', 'activo')
-    search_fields = ('usuario__username', 'usuario__first_name', 'numero_colegiado')
-    filter_horizontal = ('especialidades_adicionales',)
-    actions = ['activar_doctores', 'desactivar_doctores']
-    
-    def total_citas(self, obj):
-        return obj.cita_set.count()
-    total_citas.short_description = 'Total Citas'
+    list_display = ['get_nombre_completo', 'especialidad_principal', 'activo']
+    list_filter = ['especialidad_principal', 'activo']
+    search_fields = ['usuario__username', 'usuario__first_name', 'usuario__last_name']
+    fieldsets = (
+        ('Información Personal', {
+            'fields': ('usuario', 'numero_colegiado', 'titulo')
+        }),
+        ('Información Profesional', {
+            'fields': ('especialidad_principal', 'especialidades_adicionales', 'consultorio')
+        }),
+        ('Horario', {
+            'fields': ('horario_inicio', 'horario_fin')
+        }),
+        ('Estado', {
+            'fields': ('activo',)
+        }),
+    )
 
-    def activar_doctores(self, request, queryset):
-        queryset.update(activo=True)
-    activar_doctores.short_description = "Activar doctores seleccionados"
+    def get_nombre_completo(self, obj):
+        return obj.usuario.get_full_name()
+    get_nombre_completo.short_description = 'Nombre Completo'
 
 @admin.register(Paciente)
 class PacienteAdmin(admin.ModelAdmin):
