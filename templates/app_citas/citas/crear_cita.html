@@ -2,6 +2,9 @@
 {% block content %}
 <div class="container py-4">
     <h2>{{ titulo }}</h2>
+    <div class="alert alert-info">
+        Selecciona un doctor y luego elige una fecha y hora disponible. Solo se muestran horarios laborales y libres.
+    </div>
     <form method="post">
         {% csrf_token %}
         <div class="mb-3">
@@ -16,11 +19,12 @@
         <div class="mb-3" id="horarios-container"></div>
         <div class="mb-3">
             <label for="motivo" class="form-label">Motivo de la cita</label>
-            <textarea id="motivo" name="motivo" class="form-control" required></textarea>
+            <textarea id="motivo" name="motivo" class="form-control" required placeholder="Describe brevemente el motivo de tu cita"></textarea>
         </div>
         <div class="mb-3">
             <label for="tipo_cita" class="form-label">Tipo de cita</label>
             <select id="tipo_cita" name="tipo_cita" class="form-select" required>
+                <option value="">Seleccione el tipo de cita</option>
                 <option value="PRIMERA_VEZ">Primera Vez</option>
                 <option value="SEGUIMIENTO">Seguimiento</option>
                 <option value="CONTROL">Control</option>
@@ -44,12 +48,14 @@ doctorSelect.addEventListener('change', function() {
     const doctorId = this.value;
     if (!doctorId) return;
     const doctorData = disponibilidad.find(d => d.doctor.id == doctorId);
-    if (!doctorData) return;
+    if (!doctorData) {
+        horariosContainer.innerHTML = '<div class="alert alert-warning">No hay horarios disponibles para este doctor.</div>';
+        return;
+    }
     let html = '<label class="form-label">Fecha y hora disponible</label>';
     html += '<div class="row">';
     doctorData.dias.forEach(dia => {
         dia.horas.forEach(hora => {
-            // Un solo radio por combinación fecha-hora
             html += `<div class="col-md-6 mb-2">
                         <label class="form-check">
                             <input class="form-check-input" type="radio" name="fecha_hora" value="${dia.fecha}|${hora}" required>
@@ -62,7 +68,6 @@ doctorSelect.addEventListener('change', function() {
     horariosContainer.innerHTML = html;
 });
 
-// Al enviar el formulario, separa fecha y hora en campos ocultos
 document.querySelector('form').addEventListener('submit', function(e) {
     const selected = document.querySelector('input[name="fecha_hora"]:checked');
     if (selected) {

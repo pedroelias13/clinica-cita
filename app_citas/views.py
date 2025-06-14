@@ -54,6 +54,10 @@ def crear_cita(request):
         if dias:
             disponibilidad.append({'doctor': doctor, 'dias': dias})
 
+    # Mensaje de ayuda si no hay doctores o no hay horarios
+    if not disponibilidad:
+        messages.info(request, "No hay doctores disponibles o no hay horarios libres en los próximos días.")
+
     if request.method == 'POST':
         doctor_id = request.POST.get('doctor')
         fecha = request.POST.get('fecha')
@@ -81,7 +85,7 @@ def crear_cita(request):
                 messages.success(request, "Cita agendada correctamente.")
                 return redirect('app_citas:lista_citas')
         else:
-            messages.error(request, "Debes completar todos los campos.")
+            messages.error(request, "Debes completar todos los campos y seleccionar un horario disponible.")
     return render(request, 'app_citas/citas/crear_cita.html', {
         'disponibilidad': disponibilidad,
         'disponibilidad_json': json.dumps([
